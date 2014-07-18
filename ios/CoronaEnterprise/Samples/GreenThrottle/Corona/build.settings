@@ -1,0 +1,29 @@
+settings = 
+{
+
+	orientation = 
+	{
+		default = "landscapeRight",
+		supported = 
+		{
+		"landscapeRight", "landscapeLeft",
+		},
+					
+	},
+
+	iphone =
+	{
+		plist =
+		{
+			UIApplicationExitsOnSuspend = true, -- uncomment to quit app on suspend
+
+	        CFBundleIconFile = "Icon.png",
+	        CFBundleIconFiles = {
+	           "Icon.png", 
+	           "Icon@2x.png", 
+	           "Icon-72.png", 
+	        },
+		},
+	}
+}
+	
