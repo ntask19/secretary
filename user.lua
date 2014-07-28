@@ -242,11 +242,11 @@ local function listener(group)
 			local xPos, yPos = scrollView:getContentPosition()
 			print(yPos)
 			if yPos < 0 then
-				pageBg.y = yPos/2
+				pageBg.y = yPos*0.5
 			else
 				if header then
 					header:scale((550+yPos)/pageBg.height, (550+yPos)/pageBg.height)
-					pageBg.y = yPos/2
+					pageBg.y = yPos*0.5
 
 					underBar.height = (550+yPos)
 				end
@@ -262,16 +262,16 @@ local function listener(group)
 		username = display.newText(underGroup, "username", 230, -58, _family, 36)
 
 		alias = display.newText(underGroup, "@alias", 200, 20, _family, 28)
-		alias:setTextColor(60)
+		alias:setFillColor(60)
 
 		platform = display.newText(underGroup, "platform", 450, 20, _family, 28)
-		platform:setTextColor(60)
+		platform:setFillColor(60)
 
 		login_num = display.newText(underGroup, "login_num", 200, 60, _family, 28)
-		login_num:setTextColor(60)
+		login_num:setFillColor(60)
 
 		downloadDate = display.newText(underGroup, "downloadDate", 380, 60, _family, 28)
-		downloadDate:setTextColor(60)	
+		downloadDate:setFillColor(60)	
 
 		-- OS
 		 objY = 120
@@ -292,13 +292,13 @@ local function listener(group)
 		objY = objY + card1.height + 10
 
 		-- フォロー数
-		cardFollow, cardNumFollow = createCard({num='0', title="フォロー数", width=(_W-30)/2, color=colorPalette('orange'), mainFrame=mainContentGroup})
+		cardFollow, cardNumFollow = createCard({num='0', title="フォロー数", width=(_W-30)*0.5, color=colorPalette('orange'), mainFrame=mainContentGroup})
 		cardFollow.x = 10; cardFollow.y = objY
 		underGroup:insert(cardFollow)
 
 		-- フォロワー数
-		cardFollower, cardNumFollower = createCard({num='0', title="フォロワー数", width=(_W-30)/2, color=colorPalette(), mainFrame=mainContentGroup})
-		cardFollower.x = (_W-30)/2 + 20; cardFollower.y = objY
+		cardFollower, cardNumFollower = createCard({num='0', title="フォロワー数", width=(_W-30)*0.5, color=colorPalette(), mainFrame=mainContentGroup})
+		cardFollower.x = (_W-30)*0.5 + 20; cardFollower.y = objY
 		underGroup:insert(cardFollower)		
 
 		objY = objY + cardFollower.height + 10
@@ -326,45 +326,45 @@ local function listener(group)
 		-- openspcae
 		objY = objY + card1.height + 20
 		local openspace_title = display.newText(underGroup, "openspcae", 20, objY, _family, 30)
-		openspace_title:setTextColor( 90 )
+		openspace_title:setFillColor( 90 )
 
 		objY = objY + openspace_title.height + 10
 
-		card4, cardNum4 = createCard({num='0', title="音声投稿", width=(_W-30)/2, height = 130, color=colorPalette('white'),font_color=colorPalette('grey') , mainFrame=mainContentGroup})
+		card4, cardNum4 = createCard({num='0', title="音声投稿", width=(_W-30)*0.5, height = 130, color=colorPalette('white'),font_color=colorPalette('grey') , mainFrame=mainContentGroup})
 		card4.x = 10; card4.y = objY
 		underGroup:insert(card4)
 
 		-- CS
-		card5, cardNum5 = createCard({num='0', title="スタンプ投稿", width=(_W-30)/2, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
-		card5.x = (_W-30)/2+20; card5.y = objY
+		card5, cardNum5 = createCard({num='0', title="スタンプ投稿", width=(_W-30)*0.5, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
+		card5.x = (_W-30)*0.5+20; card5.y = objY
 		underGroup:insert(card5)
 
 		objY = objY + card5.height + 10
 
 		-- TL
-		card6, cardNum6 = createCard({num='0', title="写真投稿", width=(_W-30)/2, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
+		card6, cardNum6 = createCard({num='0', title="写真投稿", width=(_W-30)*0.5, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
 		card6.x = 10; card6.y = objY
 		underGroup:insert(card6)
 
-		card7, cardNum7 = createCard({num='0', title="写真＋音投稿", width=(_W-30)/2, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
-		card7.x = (_W-30)/2+20; card7.y = objY
+		card7, cardNum7 = createCard({num='0', title="写真＋音投稿", width=(_W-30)*0.5, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
+		card7.x = (_W-30)*0.5+20; card7.y = objY
 		underGroup:insert(card7)
 
 
 		-- closespace
 		objY = objY + card7.height + 20
 		local closespace_title = display.newText(underGroup, "closespace", 20, objY, _family, 30)
-		closespace_title:setTextColor( 90 )
+		closespace_title:setFillColor( 90 )
 
 		objY = objY + closespace_title.height + 10
 
-		card8, cardNum8 = createCard({num='0', title="音声投稿", width=(_W-30)/2, height = 130, color=colorPalette('white'),font_color=colorPalette('grey') , mainFrame=mainContentGroup})
+		card8, cardNum8 = createCard({num='0', title="音声投稿", width=(_W-30)*0.5, height = 130, color=colorPalette('white'),font_color=colorPalette('grey') , mainFrame=mainContentGroup})
 		card8.x = 10; card8.y = objY
 		underGroup:insert(card8)
 
 		-- CS
-		card9, cardNum9 = createCard({num='0', title="スタンプ投稿", width=(_W-30)/2, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
-		card9.x = (_W-30)/2+20; card9.y = objY
+		card9, cardNum9 = createCard({num='0', title="スタンプ投稿", width=(_W-30)*0.5, height = 130, color=colorPalette('white'), font_color=colorPalette('grey') ,mainFrame=mainContentGroup})
+		card9.x = (_W-30)*0.5+20; card9.y = objY
 		underGroup:insert(card9)
 
 		objY = objY + card9.height + 10
@@ -386,7 +386,7 @@ local function listener(group)
 		-- closespace
 		objY = objY + card12.height + 20
 		local closespace_title = display.newText(underGroup, "timeline", 20, objY, _family, 30)
-		closespace_title:setTextColor( 90 )
+		closespace_title:setFillColor( 90 )
 
 		objY = objY + closespace_title.height + 10
 

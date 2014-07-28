@@ -1,3 +1,49 @@
+-- plprint関数
+_print = print
+
+function printTable(table, prefix)
+	if not prefix then
+		prefix = "### "
+	end
+	if _isDebug == true then 
+		if type(table) == "table" then
+			for key, value in pairs(table) do
+				if type(value) == "table" then
+					_print(prefix .. tostring(key))
+					_print(prefix .. "{")
+					printTable(value, prefix .. "   ")
+					_print(prefix .. "}")
+				else
+					_print(prefix .. tostring(key) .. ": " .. tostring(value))
+				end
+			end
+		end
+	end
+end
+
+function plprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
+	if _isDebug == true then
+		if type(str1) == "table" then
+			printTable(str1)
+		else
+			if str2 == nil then str2 = "" end 
+			if str3 == nil then str3 = "" end 
+			if str4 == nil then str4 = "" end 
+			if str5 == nil then str5 = "" end 
+			if str6 == nil then str6 = "" end 
+			if str7 == nil then str7 = "" end 
+			if str8 == nil then str8 = "" end 
+			if str9 == nil then str9 = "" end 
+			if str10 == nil then str10 = "" end 
+			_print( tostring(str1), tostring(str2), tostring(str3), tostring(str4), tostring(str5), tostring(str6), tostring(str7), tostring(str8), tostring(str9), tostring(str10))
+		end
+	end
+end
+
+function print( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
+	plprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
+end
+
 
 --時間の表示を〇〇分前等にかえる
 function dateFormat(dateTime)
@@ -73,38 +119,38 @@ end
 -- ダウンロードする関数
 -- 既に持っているか、http:// or local://　かをチェックして画像を準備する
 function checkDownload(url, action, dir, root)
-  local directory = dir or system.TemporaryDirectory
-  local filePath = root or ""
-  if startsWith(url,"http://") then
-    local path = system.pathForFile(basename(url), directory)
-    local file = io.open(path, "r")
-    if file then
-      io.close(file)
-      if action then
-        action()
-      end
-    else
-      local function listener(event)
-        if event.isError then
-        else
-          if event.status ~= 200 then
-            os.remove(system.pathForFile( basename(url), directory))
-          end          
-          if action then
-            action()
-          end
-        end
-      end
-      
-      local headers = {}
-      headers["User-Agent"] = userAgent
-      local params = {}
-      params.headers = headers
-      network.download(url, "GET", listener, filePath..basename(url), directory)
-    end
-  else
-    if action then
-      action()
-    end   
-  end
+	local directory = dir or system.TemporaryDirectory
+	local filePath = root or ""
+	if startsWith(url,"http://") then
+		local path = system.pathForFile(basename(url), directory)
+		local file = io.open(path, "r")
+		if file then
+			io.close(file)
+			if action then
+				action()
+			end
+		else
+			local function listener(event)
+				if event.isError then
+				else
+					if event.status ~= 200 then
+						os.remove(system.pathForFile( basename(url), directory))
+					end          
+					if action then
+						action()
+					end
+				end
+			end
+			
+			local headers = {}
+			headers["User-Agent"] = userAgent
+			local params = {}
+			params.headers = headers
+			network.download(url, "GET", listener, filePath..basename(url), directory)
+		end
+	else
+		if action then
+			action()
+		end   
+	end
 end

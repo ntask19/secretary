@@ -7,6 +7,9 @@ tsutil  = require('tsutil')
 library = require('library')
 widget = require('widget')
 
+-- 開発用
+_isDebug = true
+
 
 ----------------------------------------------------------------------
 -- DBを触る
@@ -21,7 +24,7 @@ db = sqlite3.open(path)
 --アプリ終了時はDB接続をクローズするようにする。
 local function onSystemEvent( event )
 	if( event.type == "applicationExit" ) then
-		print("close")            
+		plprint("close")            
 		db:close()
 	end
 end
@@ -48,7 +51,8 @@ end
 
 -- メイン画面
 local mainGroup = display.newGroup()
-local background = display.newRect(mainGroup, 0, 0, _W, _H)
+local background = display.newRect(mainGroup, _W*0.5, _H*0.5, _W, _H)
+background.alpha = 0.1
 
 
 
@@ -63,12 +67,12 @@ local tasklist = tasklist_model.new()
 local tasklistData = tasklist.getList()
 local tasklistView = tasklist_view.show(tasklistData, {})
 mainGroup:insert(tasklistView)
-tasklistView.y = _H/2
+tasklistView.y = _H*0.5
 
 
 
 -- タスク追加ボタン
 local task = task_model.new()
-local addTaskBtn = display.newRect(mainGroup, _W-150, 50, 140, 80)
+local addTaskBtn = display.newRect(mainGroup, _W-150, 150, 140, 80)
 addTaskBtn:setFillColor( 0, 90, 90)
 addTaskBtn:addEventListener( "tap", function() task.addTask("テスト", "詳細だよ")  end )

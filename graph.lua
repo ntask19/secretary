@@ -45,15 +45,15 @@ local function listener(group)
 
 			-- local dataDot = display.newCircle(group, 0, 0, 8)
 			-- dataDot:setFillColor(color[1],color[2],color[3])
-			-- dataDot.x, dataDot.y = row.x + row.width/2, row.y
+			-- dataDot.x, dataDot.y = row.x + row.width*0.5, row.y
 
 			local data = display.newText(group, v.num, 0, 0, _family, 27)
-			data:setTextColor(color[1],color[2],color[3])
-			data.x, data.y = _W - data.width/2 - 20, row.y
+			data:setFillColor(color[1],color[2],color[3])
+			data.x, data.y = _W - data.width*0.5 - 20, row.y
 
 			local Year, Month, Day, Hour, Minute, Second = dateFormat(v.date)
 			local date = display.newText(group, Day, 10, 0, _family, 32)
-			date:setTextColor(80)
+			date:setFillColor(80)
 			date.y = row.y
 
 			rowY = rowY + 60
