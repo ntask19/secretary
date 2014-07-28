@@ -1,7 +1,0 @@
-require 'olua'
-require 'olua.lib' 
-
-module("olua.app", package.seeall)
-
-require 'olua.app.application'
-require 'olua.app.argumentparser'
