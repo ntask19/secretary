@@ -13,18 +13,7 @@ local function Listener()
 	local function getListInDB(id)
 
 
-		--テーブル名
-		local tableName = "task"
-		--存在していない場合はテーブルを新規作成
-		db:exec([[CREATE TABLE IF NOT EXISTS ]]..tableName..[[ (id INTEGER PRIMARY KEY, title, create_date, datail, is_checked, date)]])
-
-		-- データ取得
-		local res = {}
-		for row in db:nrows("SELECT * FROM "..tableName) do
-			table.insert(res, row)
-		end
-
-		return res
+		return jsonData
 	end
 
 	-----------------------------------------------
@@ -42,6 +31,23 @@ local function Listener()
 	end
 
 
+	-----------------------------------------------
+	-- タスク追加
+	--
+	-- @param (int) リスト一覧のid
+	-- @value (json) リスト一覧のデータ
+	-----------------------------------------------
+	function func.addTask(title, detail)
+
+		print(title, detail)
+		-- (id INTEGER PRIMARY KEY, title, create_date, datail, is_checked, date)
+		--db:exec([[INSERT INTO task VALUES (NULL, ']]..title..[[', NOW() ,']]..detail..[[', 0, NOW()); ]])		
+		db:exec([[INSERT INTO task VALUES (NULL, 'test', datetime('now'), 'detail-detail', 0, datetime('now')); ]])	
+
+		return true
+
+	end
+
 
 	-----------------------------------------------
 	-- タスク一覧をキャッシュから取得
@@ -51,26 +57,6 @@ local function Listener()
 	-----------------------------------------------
 	function func.getList(id)
 		return getListInCache(id)
-	end
-
-
-	-----------------------------------------------
-	-- タスク一覧を削除する
-	--
-	-- @param (int) リスト一覧のid
-	-- @value (json) リスト一覧のデータ
-	-----------------------------------------------	
-	function func.removeList()
-		local filename = id..".txt."
-		local path = system.pathForFile(filename, system.DocumentsDirectory)
-		local file = io.open(path, "r")			
-
-		if file then
-			os.remove(path)
-			return true
-		else
-			return false
-		end
 	end
 
 	return func
