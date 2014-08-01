@@ -40,9 +40,9 @@ local function Listener()
 	function func.addTask(title, detail)
 
 		print(title, detail)
-		-- (id INTEGER PRIMARY KEY, title, create_date, datail, is_checked, date)
+		-- (id INTEGER PRIMARY KEY, title, datetime, is_checked)
 		--db:exec([[INSERT INTO task VALUES (NULL, ']]..title..[[', NOW() ,']]..detail..[[', 0, NOW()); ]])		
-		db:exec([[INSERT INTO task VALUES (NULL, 'test', datetime('now'), 'detail-detail', 0, datetime('now')); ]])	
+		db:exec([[INSERT INTO task VALUES (NULL, 'test', datetime('now'), 0);]])	
 
 		return true
 
