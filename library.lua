@@ -1,4 +1,4 @@
--- plprint関数
+-- ssprint関数
 _print = print
 
 function printTable(table, prefix)
@@ -21,7 +21,7 @@ function printTable(table, prefix)
 	end
 end
 
-function plprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
+function ssprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
 	if _isDebug == true then
 		if type(str1) == "table" then
 			printTable(str1)
@@ -41,7 +41,7 @@ function plprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
 end
 
 function print( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
-	plprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
+	ssprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
 end
 
 
@@ -152,5 +152,35 @@ function checkDownload(url, action, dir, root)
 		if action then
 			action()
 		end   
+	end
+end
+
+-- 日付のXXXX-XX-XX XX:XX:XX表記をXX:XX表記に変換する
+function datetime_cast( datetime )
+	local time 
+	if datetime ~= nil and datetime ~= 'NULL' then
+		time = string.sub( datetime, 12, 16 )
+	else
+		time = '-' 
+	end
+	return time
+end
+
+-- 日付のXXXX-XX-XX XX:XX:XX表記をXX-XX表記に変換する
+function date_cast( datetime )
+	local date = string.sub( datetime, 6, 10 )
+	return date
+end
+
+--read text
+function readText(name, dir)
+	local directory = dir or system.DocumentsDirectory
+	local path = system.pathForFile(name, system.DocumentsDirectory)
+	local file = io.open(path, "r")
+	if file then
+		local contents = file:read("*a")
+		return contents
+	else
+		return nil
 	end
 end

@@ -1,5 +1,16 @@
--- tasklist_model
--- 
+--[[
+@
+@ Project  : SpaceSecretary
+@
+@ Filename : tasklist_model.lua
+@
+@ Author   : Ryo Takahashi, Task Nagashige
+@
+@ Date     : 2014-07-31
+@
+@ Comment  : 文字設定のライブラリ
+@
+]]--
 
 module(..., package.seeall)
 

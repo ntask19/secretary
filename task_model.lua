@@ -39,7 +39,7 @@ local function Listener()
 	-----------------------------------------------
 	function func.addTask(title, detail)
 
-		plprint(title, detail)
+		ssprint(title, detail)
 		-- (id INTEGER PRIMARY KEY, title, create_date, datail, is_checked, date)
 		--db:exec([[INSERT INTO task VALUES (NULL, ']]..title..[[', NOW() ,']]..detail..[[', 0, NOW()); ]])		
 		db:exec([[INSERT INTO task VALUES (NULL, 'test', datetime('now'), 'detail-detail', 0, datetime('now')); ]])	
