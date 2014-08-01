@@ -54,15 +54,17 @@ function show(data, option)
 
 	local taskCellGroup = display.newGroup()
 	scrollView:insert( taskCellGroup )
-	if #data == 0 then
-		local non_tasks = display.newText(taskCellGroup, "今日のタスクはないよ", 0, 0, nil, 34)
+	if #data == 0 or data['tasks'] == nil then
+		local non_tasks = display.newText(taskCellGroup, "今日のタスクはないよ", _W*0.5, 100, nil, 34)
 		non_tasks:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
 	else
 		local taskCount = 1
-		
+	
 		for key = 1, #data do
 			local value = data[key]
 			ssprint( key, value )
+			ssprint(value)
+			ssprint(value['tasks'])
 
 			if key == 1 then
 				_datetime = value.date
@@ -161,23 +163,27 @@ function showList(data, option)
 			local dateTitle = display.newText(taskCellGroup, date_cast( datetime ), _W*0.5, (taskCount-1)*100+40, nil, 30)
 			dateTitle:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
 
-			for k = 1, #value['tasks'] do
-				local v = value['tasks'][k]
-				ssprint( k, v )
+			if value ~= nil and value['tasks'] ~= nil then
+				for k = 1, #value['tasks'] do
+					local v = value['tasks'][k]
+					ssprint( k, v )
 
-				local taskBackground = display.newRect( taskCellGroup, _W*0.5, (taskCount-1)*100+100+40, _W-200, 80 )
-				taskBackground:setFillColor( colorScheme.Func('tsGreen')[1], colorScheme.Func('tsGreen')[2], colorScheme.Func('tsGreen')[3] )
-				taskBackground.alpha = 0.8
+					local taskBackground = display.newRect( taskCellGroup, _W*0.5, (taskCount-1)*100+100+40, _W-200, 80 )
+					taskBackground:setFillColor( colorScheme.Func('tsGreen')[1], colorScheme.Func('tsGreen')[2], colorScheme.Func('tsGreen')[3] )
+					taskBackground.alpha = 0.8
 
-				local taskTitle = display.newText(taskCellGroup, v.title, _W*0.6, (taskCount-1)*100+100+40, nil, 30)
-				taskTitle:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+					local taskTitle = display.newText(taskCellGroup, v.title, _W*0.6, (taskCount-1)*100+100+40, nil, 30)
+					taskTitle:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
 
-				local date = display.newText(taskCellGroup, datetime_cast( v.datetime ), _W*0.5-150, (taskCount-1)*100+100+40, nil, 30)
-				date:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+					local date = display.newText(taskCellGroup, datetime_cast( v.datetime ), _W*0.5-150, (taskCount-1)*100+100+40, nil, 30)
+					date:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+					taskCount = taskCount + 1
+				end
 				taskCount = taskCount + 1
+			else
+
 			end
 
-			taskCount = taskCount + 1
 
 		end
 

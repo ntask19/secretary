@@ -70,9 +70,9 @@ local task_model = require('task_model')
 local tasklist = tasklist_model.new()
 local tasklistData = tasklist.getList()
 if _isDebug == true then
-	local jsonData = readText( 'todo.json' )
-	ssprint( jsonData )
-	tasklistData = json.decode( jsonData )
+	-- local jsonData = readText( 'todo.json' )
+	-- ssprint( jsonData )
+	-- tasklistData = json.decode( jsonData )
 end
 
 local tasklistView = tasklist_view.show(tasklistData, {})
@@ -84,7 +84,7 @@ tasklistView.y = _H*0.5
 local task = task_model.new()
 local addTaskBtn = display.newRect(mainGroup, 100, 150, 80, 80)
 addTaskBtn:setFillColor( colorScheme.Func('tsRed')[1], colorScheme.Func('tsRed')[2], colorScheme.Func('tsRed')[3] )
-addTaskBtn:addEventListener( "tap", function() task.addTask("テスト", "詳細だよ")  end )
+addTaskBtn:addEventListener( "tap", function() task.addTask("テスト", "2014-08-01 02:33:43")  end )
 
 local taskListBtn = display.newRect(mainGroup, 100, 250, 80, 80)
 taskListBtn:setFillColor( colorScheme.Func('tsBlue')[1], colorScheme.Func('tsBlue')[2], colorScheme.Func('tsBlue')[3] )

@@ -39,10 +39,9 @@ local function Listener()
 	-----------------------------------------------
 	function func.addTask(title, date)
 
-		ssprint(title, detail)
-		-- (id INTEGER PRIMARY KEY, title, datetime, is_checked)
+		ssprint(title)
 		--db:exec([[INSERT INTO task VALUES (NULL, ']]..title..[[', NOW() ,']]..detail..[[', 0, NOW()); ]])		
-		db:exec([[INSERT INTO task VALUES (NULL, ']] ..title.. [[, ']]..date..[[', 0);]])	
+		db:exec([[INSERT INTO task VALUES (NULL, ']] ..title.. [[', ']]..date..[[', 0);]])	
 
 		return true
 
