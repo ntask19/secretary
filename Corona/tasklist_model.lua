@@ -85,6 +85,7 @@ local function Listener()
 		end
 		table.insert(res, date_row)
 		
+		print(json.encode(res))
 		return res
 	end
 

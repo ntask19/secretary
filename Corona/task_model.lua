@@ -37,12 +37,12 @@ local function Listener()
 	-- @param (int) リスト一覧のid
 	-- @value (json) リスト一覧のデータ
 	-----------------------------------------------
-	function func.addTask(title, detail)
+	function func.addTask(title, date)
 
 		print(title, detail)
 		-- (id INTEGER PRIMARY KEY, title, datetime, is_checked)
 		--db:exec([[INSERT INTO task VALUES (NULL, ']]..title..[[', NOW() ,']]..detail..[[', 0, NOW()); ]])		
-		db:exec([[INSERT INTO task VALUES (NULL, 'test', datetime('now'), 0);]])	
+		db:exec([[INSERT INTO task VALUES (NULL, ']] ..title.. [[, ']]..date..[[', 0);]])	
 
 		return true
 
