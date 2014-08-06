@@ -31,6 +31,81 @@ local function Listener()
 	end
 
 
+
+	-----------------------------------------------
+	-- タスク完了、未完了編集
+	--
+	-- @param id : (int) タスクid
+	--
+	-- @value (boolean) 成功失敗
+	-----------------------------------------------
+	local function checkedTask(id, is_checked)
+
+		assert( id "NOT FOUNT id")
+		
+		if id then
+			local result = {result='failure', reason='not_found_title'}
+			return result
+		else
+			db:exec([[UPDATE task SET is_checked = ]] ..is_checked.. [[ WHERE id = ]] id [[;]])	
+			local result = {result='success'}
+			return result			
+		end
+	end
+
+
+	-----------------------------------------------
+	-- タスク完了、未完了編集
+	--
+	-- @param id : (int) タスクid
+	--
+	-- @value (boolean) 成功失敗
+	-----------------------------------------------
+	function func.completed(id)
+		return checkedTask(id, 0)
+	end
+
+	-----------------------------------------------
+	-- タスク未完了
+	--
+	-- @param id : (int) タスクid
+	--
+	-- @value (boolean) 成功失敗
+	-----------------------------------------------
+	function func.notYet(id)
+		return checkedTask(id, 0)
+	end	
+
+	-----------------------------------------------
+	-- タスク編集
+	--
+	-- @param id : (int) タスクid
+	-- @param title : (int) タスク名
+	-- @param date : (int) タスク日付
+	--
+	-- @value (boolean) 成功失敗
+	-----------------------------------------------
+	function func.updateTask(id, title, date)
+
+		assert( id "NOT FOUNT id")
+		assert( title "NOT FOUNT title")
+
+		if title then
+			local result = {result='failure', reason='not_found_title'}
+			return result
+		elseif id then
+			local result = {result='failure', reason='not_found_title'}
+			return result
+		else
+			db:exec([[UPDATE task SET title = '] ..title.. [[', date=']]..date..[[', WHERE id = ]] id [[;]])	
+			local result = {result='success'}
+			return result			
+		end
+
+		return true
+
+	end
+
 	-----------------------------------------------
 	-- タスク追加
 	--
@@ -39,7 +114,8 @@ local function Listener()
 	-----------------------------------------------
 	function func.addTask(title, date)
 
-		ssprint(title)
+		print(title, date)
+		-- (id INTEGER PRIMARY KEY, title, datetime, is_checked)
 		--db:exec([[INSERT INTO task VALUES (NULL, ']]..title..[[', NOW() ,']]..detail..[[', 0, NOW()); ]])		
 		db:exec([[INSERT INTO task VALUES (NULL, ']] ..title.. [[', ']]..date..[[', 0);]])	
 
