@@ -54,11 +54,10 @@ local MultipartFormData = require("class_MultipartFormData")
 
 -- メイン画面
 local mainGroup = display.newGroup()
-local background = display.newRect(mainGroup, _W*0.5, _H*0.5, _W, _H)
-background:setFillColor( colorScheme.Func(0)[1], colorScheme.Func(0)[2], colorScheme.Func(0)[3] )
+local background = display.newRect(mainGroup, 0, 0, _W, _H)
 
-local background = display.newRect(mainGroup, _W*0.5, _H*0.5, _W, _H)
-background:setFillColor( colorScheme.Func('tsYellow')[1], colorScheme.Func('tsYellow')[2], colorScheme.Func('tsYellow')[3] )
+local background = display.newRect(mainGroup, 0, 0, _W, _H)
+colorScheme.Func( 'tsYellow', background )
 background.alpha = 0.5
 
 
@@ -66,6 +65,7 @@ background.alpha = 0.5
 local tasklist_model = require('tasklist_model')
 local tasklist_view = require('tasklist_view')
 local task_model = require('task_model')
+local task_popup = require( viewDir .. 'task_popup')
 
 local tasklist = tasklist_model.new()
 local tasklistData = tasklist.getList()
@@ -77,15 +77,18 @@ end
 
 local tasklistView = tasklist_view.show(tasklistData, {})
 mainGroup:insert(tasklistView)
-tasklistView.y = _H*0.5
 
 
 -- タスク追加ボタン
 local task = task_model.new()
-local addTaskBtn = display.newRect(mainGroup, 100, 150, 80, 80)
-addTaskBtn:setFillColor( colorScheme.Func('tsRed')[1], colorScheme.Func('tsRed')[2], colorScheme.Func('tsRed')[3] )
-addTaskBtn:addEventListener( "tap", function() task.addTask("テスト", "2014-08-01 02:33:43")  end )
+local addTaskBtn = display.newRect(mainGroup, 40, 100, 80, 80)
+colorScheme.Func( 'tsRed', addTaskBtn )
+addTaskBtn:addEventListener( "tap", function() task_popup.createTask() end )--task.addTask("テスト", "2014-08-01 02:33:43")  end )
+local addTaskText = display.newText( mainGroup, "ADD", 0, 0, nil, 36 )
+addTaskText.x, addTaskText.y = addTaskBtn.x, addTaskBtn.y
 
-local taskListBtn = display.newRect(mainGroup, 100, 250, 80, 80)
-taskListBtn:setFillColor( colorScheme.Func('tsBlue')[1], colorScheme.Func('tsBlue')[2], colorScheme.Func('tsBlue')[3] )
-taskListBtn:addEventListener( "tap", function() tasklist_view.showList(tasklistData, {}) end )
+local taskListBtn = display.newRect(mainGroup, 40, 200, 80, 80)
+colorScheme.Func( 'tsBlue', taskListBtn )
+taskListBtn:addEventListener( "tap", function() local tasklistData = tasklist.getList(); tasklist_view.showList(tasklistData, {}) end )
+local taskListText = display.newText( mainGroup, "List", 0, 0, nil, 36 )
+taskListText.x, taskListText.y = taskListBtn.x, taskListBtn.y

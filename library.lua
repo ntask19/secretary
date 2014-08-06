@@ -184,3 +184,7 @@ function readText(name, dir)
 		return nil
 	end
 end
+
+function returnTrue()
+	return true
+end

@@ -11,6 +11,7 @@
 @ Comment  : タスクのリストを表示
 @
 ]]--
+local task_popup = require( viewDir .. 'task_popup' )
 
 module(..., package.seeall)
 
@@ -22,6 +23,11 @@ local custome = {
 
 function show(data, option)
 	local group = display.newGroup()
+	if scrollView ~= nil then
+		display.remove( scrollView )
+		scrollView = nil
+	end
+
 
 	local status = option or custome
 	local height = status.height or 100
@@ -38,7 +44,7 @@ function show(data, option)
 	scrollView = widget.newScrollView(
 		{
 			id = 1,
-			top = 0,
+			top = _H*0.5,
 			left = 0,
 			height = _H*0.5,
 			width = _W,
@@ -54,17 +60,15 @@ function show(data, option)
 
 	local taskCellGroup = display.newGroup()
 	scrollView:insert( taskCellGroup )
-	if #data == 0 or data['tasks'] == nil then
-		local non_tasks = display.newText(taskCellGroup, "今日のタスクはないよ", _W*0.5, 100, nil, 34)
-		non_tasks:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+	print( data )
+	if #data == 0 or data[1]['tasks'] == nil then
+		local non_tasks = display.newText(taskCellGroup, "今日のタスクはないよ", 100, _H*0.5, nil, 34)
+		colorScheme.Func('tsBlack', non_tasks)
 	else
 		local taskCount = 1
 	
 		for key = 1, #data do
 			local value = data[key]
-			ssprint( key, value )
-			ssprint(value)
-			ssprint(value['tasks'])
 
 			if key == 1 then
 				_datetime = value.date
@@ -74,26 +78,29 @@ function show(data, option)
 				local v = value['tasks'][k]
 				ssprint( k, v )
 
-				local taskBackground = display.newRect( taskCellGroup, _W*0.5, (taskCount-1)*100+100, _W-200, 80 )
-				taskBackground:setFillColor( colorScheme.Func('tsGreen')[1], colorScheme.Func('tsGreen')[2], colorScheme.Func('tsGreen')[3] )
-				taskBackground.alpha = 0.8
+				local taskBackground = display.newRect( taskCellGroup, 100, taskCount*100+100, _W-200, 80 )
+				colorScheme.Func( 'tsGreen', taskBackground )
+				taskBackground.alpha = 0.5
 
-				local taskTitle = display.newText(taskCellGroup, v.title, _W*0.6, (taskCount-1)*100+100, nil, 30)
-				taskTitle:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+				local taskTitle = display.newText(taskCellGroup, v.title, _W*0.5, taskCount*100+100, nil, 30)
+				colorScheme.Func( 'tsBlack', taskTitle )
 
-				local date = display.newText(taskCellGroup, datetime_cast( v.datetime ), _W*0.5-150, (taskCount-1)*100+100, nil, 30)
-				date:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+				local date = display.newText(taskCellGroup, datetime_cast( v.datetime ), 150, taskCount*100+100, nil, 30)
+				colorScheme.Func( 'tsBlack', date )
 				taskCount = taskCount + 1
+
+				taskBackground:addEventListener( "tap", function() task_popup.editTask( v.title ) end )
 			end
 
 		end
 
-		local taskListBackground = display.newRect( group, _W*0.5, -40, _W-100, 80 )
-		taskListBackground:setFillColor( colorScheme.Func('tsGreen')[1], colorScheme.Func('tsGreen')[2], colorScheme.Func('tsGreen')[3] )
+		local taskListBackground = display.newRect( group, 50, _H*0.5, _W-100, 80 )
+		colorScheme.Func( 'tsGreen', taskListBackground )
 
-		local datetime = _datetime or '2014-01-01 00:00:00'
-		local dateTitle = display.newText(group, date_cast( datetime ), _W*0.5, -40, nil, 30)
-		dateTitle:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+
+		local datetime = os.date( "%Y-%m-%d %H:%M:%S" ) or '2014-01-01 00:00:00'
+		local dateTitle = display.newText(group, date_cast( datetime ), _W*0.5, _H*0.5, nil, 30)
+		colorScheme.Func( 'tsBlack', dateTitle )
 
 	end
 
@@ -103,17 +110,18 @@ end
 function showList(data, option)
 	local group = display.newGroup()
 
-	local background = display.newRect(group, _W*0.5, _H*0.5, _W, _H)
-	background:setFillColor( colorScheme.Func(0)[1], colorScheme.Func(0)[2], colorScheme.Func(0)[3] )
+	local background = display.newRect(group, 0, 0, _W, _H)
 
-	local background = display.newRect(group, _W*0.5, _H*0.5, _W, _H)
-	background:setFillColor( colorScheme.Func('tsYellow')[1], colorScheme.Func('tsYellow')[2], colorScheme.Func('tsYellow')[3] )
+	local background = display.newRect(group, 0, 0, _W, _H)
+	colorScheme.Func( 'tsYellow', background )
 	background.alpha = 0.5
 
 
-	local backBtn = display.newRect(group, _W-60, 60, 80, 80)
-	backBtn:setFillColor( colorScheme.Func('tsRed')[1], colorScheme.Func('tsRed')[2], colorScheme.Func('tsRed')[3] )
+	local backBtn = display.newRect(group, _W-90, 60, 80, 80)
+	colorScheme.Func( 'tsRed', backBtn )
 	backBtn:addEventListener( "tap", function() display.remove(group); group = nil  end )
+	local backBtnText = display.newText( group, "Exit", 0, 0, nil, 36 )
+	backBtnText.x, backBtnText.y = backBtn.x, backBtn.y
 
 	local status = option or custome
 	local height = status.height or 100
@@ -147,8 +155,8 @@ function showList(data, option)
 	local taskCellGroup = display.newGroup()
 	scrollView:insert( taskCellGroup )
 	if #data == 0 then
-		local non_tasks = display.newText(taskCellGroup, "今日のタスクはないよ", 0, 0, nil, 34)
-		non_tasks:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+		local non_tasks = display.newText(taskCellGroup, "今日のタスクはないよ", 100, 100, nil, 34)
+		colorScheme.Func('tsBlack', non_tasks)
 	else
 		local taskCount = 1
 		
@@ -156,28 +164,30 @@ function showList(data, option)
 			local value = data[key]
 			ssprint( key, value )
 
-			local taskListBackground = display.newRect( taskCellGroup, _W*0.5, (taskCount-1)*100+40, _W-100, 80 )
-			taskListBackground:setFillColor( colorScheme.Func('tsGreen')[1], colorScheme.Func('tsGreen')[2], colorScheme.Func('tsGreen')[3] )
+			local taskListBackground = display.newRect( taskCellGroup, 50, (taskCount-1)*100+40, _W-100, 80 )
+			colorScheme.Func( 'tsGreen', taskListBackground )
 
 			local datetime = value.date or '2014-01-01 00:00:00'
-			local dateTitle = display.newText(taskCellGroup, date_cast( datetime ), _W*0.5, (taskCount-1)*100+40, nil, 30)
-			dateTitle:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+			local dateTitle = display.newText(taskCellGroup, date_cast( datetime ), 100, (taskCount-1)*100+40, nil, 30)
+			colorScheme.Func( 'tsBlack', dateTitle )
 
 			if value ~= nil and value['tasks'] ~= nil then
 				for k = 1, #value['tasks'] do
 					local v = value['tasks'][k]
 					ssprint( k, v )
 
-					local taskBackground = display.newRect( taskCellGroup, _W*0.5, (taskCount-1)*100+100+40, _W-200, 80 )
-					taskBackground:setFillColor( colorScheme.Func('tsGreen')[1], colorScheme.Func('tsGreen')[2], colorScheme.Func('tsGreen')[3] )
+					local taskBackground = display.newRect( taskCellGroup, 100, (taskCount-1)*100+100+40, _W-200, 80 )
+					colorScheme.Func( 'tsGreen', taskBackground )
 					taskBackground.alpha = 0.8
 
-					local taskTitle = display.newText(taskCellGroup, v.title, _W*0.6, (taskCount-1)*100+100+40, nil, 30)
-					taskTitle:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+					local taskTitle = display.newText(taskCellGroup, v.title, _W*0.5, (taskCount-1)*100+100+40, nil, 30)
+					colorScheme.Func( 'tsBlack', taskTitle )
 
-					local date = display.newText(taskCellGroup, datetime_cast( v.datetime ), _W*0.5-150, (taskCount-1)*100+100+40, nil, 30)
-					date:setFillColor( colorScheme.Func('tsBlack')[1], colorScheme.Func('tsBlack')[2], colorScheme.Func('tsBlack')[3] )
+					local date = display.newText(taskCellGroup, datetime_cast( v.datetime ), 100, (taskCount-1)*100+100+40, nil, 30)
+					colorScheme.Func( 'tsBlack', date )
 					taskCount = taskCount + 1
+
+					taskBackground:addEventListener( "tap", function() task_popup.editTask( v.title ) end )
 				end
 				taskCount = taskCount + 1
 			else
