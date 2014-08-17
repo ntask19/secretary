@@ -41,13 +41,15 @@ local function Listener()
 	-----------------------------------------------
 	local function checkedTask(id, is_checked)
 
-		assert( id "NOT FOUNT id")
+		assert( id, "NOT FOUNT id")
+		print( id, is_checked )
 		
-		if id then
-			local result = {result='failure', reason='not_found_title'}
+		if id == nil then
+			local result = {result='failure', reason='not_found_id'}
 			return result
 		else
-			db:exec([[UPDATE task SET is_checked = ]] ..is_checked.. [[ WHERE id = ]] id [[;]])	
+
+			db:exec([[UPDATE task SET is_checked = ]] ..is_checked.. [[ WHERE id = ]]..id.. [[;]])	
 			local result = {result='success'}
 			return result			
 		end
@@ -62,7 +64,10 @@ local function Listener()
 	-- @value (boolean) 成功失敗
 	-----------------------------------------------
 	function func.completed(id)
-		return checkedTask(id, 0)
+		local res = checkedTask(id, 1)
+		print( res )
+		return res
+		-- return checkedTask(id, 1)
 	end
 
 	-----------------------------------------------
@@ -73,7 +78,10 @@ local function Listener()
 	-- @value (boolean) 成功失敗
 	-----------------------------------------------
 	function func.notYet(id)
-		return checkedTask(id, 0)
+		local res = checkedTask(id, 0)
+		print( res )
+		return res
+		-- return checkedTask(id, 0)
 	end	
 
 	-----------------------------------------------
@@ -87,18 +95,25 @@ local function Listener()
 	-----------------------------------------------
 	function func.updateTask(id, title, date)
 
-		assert( id "NOT FOUNT id")
-		assert( title "NOT FOUNT title")
+		assert( id, "NOT FOUNT id")
+		assert( title, "NOT FOUNT title")
 
-		if title then
+		if title == nil then
 			local result = {result='failure', reason='not_found_title'}
+			print( result )
 			return result
-		elseif id then
-			local result = {result='failure', reason='not_found_title'}
+		elseif id == nil then
+			local result = {result='failure', reason='not_found_id'}
+			print( result )
 			return result
 		else
-			db:exec([[UPDATE task SET title = '] ..title.. [[', date=']]..date..[[', WHERE id = ]] id [[;]])	
+			if date == nil then
+				db:exec([[UPDATE task SET title = ']] ..title.. [[' WHERE id = ]]..id..[[;]])
+			else
+				db:exec([[UPDATE task SET title = ']] ..title.. [[' date=']]..date..[[' WHERE id = ]]..id..[[;]])	
+			end
 			local result = {result='success'}
+			print( result )
 			return result			
 		end
 
@@ -114,10 +129,34 @@ local function Listener()
 	-----------------------------------------------
 	function func.addTask(title, date)
 
-		print(title, date)
-		-- (id INTEGER PRIMARY KEY, title, datetime, is_checked)
-		--db:exec([[INSERT INTO task VALUES (NULL, ']]..title..[[', NOW() ,']]..detail..[[', 0, NOW()); ]])		
+		print(title, date)	
 		db:exec([[INSERT INTO task VALUES (NULL, ']] ..title.. [[', ']]..date..[[', 0);]])	
+
+		return true
+
+	end
+
+	-----------------------------------------------
+	-- タスク削除
+	--
+	-- @param id : (int) タスクid
+	--
+	-- @value (boolean) 成功失敗
+	-----------------------------------------------
+	function func.deleteTask(id)
+
+		assert( id, "NOT FOUNT id")
+
+		if id == nil then
+			local result = {result='failure', reason='not_found_id'}
+			print( result )
+			return result
+		else
+			db:exec([[DELETE FROM task WHERE id = ]]..id..[[;]])	
+			local result = {result='success'}
+			print( result )
+			return result			
+		end
 
 		return true
 

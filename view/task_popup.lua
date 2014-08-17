@@ -37,12 +37,21 @@ function createTask()
 	local popupCloseBtn = display.newRect( createGroup, 0, _H*0.3+100, 150, 80 )
 	popupCloseBtn.x = _W*0.5-100
 	colorScheme.Func( 'tsBlue', popupCloseBtn )
-	popupCloseBtn:addEventListener( "tap", function() display.remove( createGroup ); createGroup = nil; end )
+	popupCloseBtn:addEventListener( "tap", function() display.remove( createGroup ); createGroup = nil; native.setKeyboardFocus( nil ) end )
 
 	local popupCompleteBtn = display.newRect( createGroup, 0, _H*0.3+100, 150, 80 )
 	popupCompleteBtn.x = _W*0.5+100
 	colorScheme.Func( 'tsRed', popupCompleteBtn )
-	popupCompleteBtn:addEventListener( "tap", function() task.addTask( taskContents, os.date( "%Y-%m-%d %H:%M:%S" ) ); local tasklistData = tasklist.getList(); display.remove( createGroup ); createGroup = nil;  end )
+	popupCompleteBtn:addEventListener( "tap", 
+		function()
+			task.addTask( taskContents, os.date( "%Y-%m-%d %H:%M:%S" ) )
+			local tasklistData = tasklist.getList()
+			display.remove( createGroup )
+			createGroup = nil
+			native.setKeyboardFocus( nil )
+			homeReplace( 'home' )
+		end 
+	)
 
 	local function popupTextFieldListener( event )
 	    if event.phase == "began" then
@@ -71,9 +80,9 @@ function createTask()
 
 end
 
-function editTask( task )
-	local taskContents = task
-
+function editTask( id, title )
+	local id = id
+	local taskContents = title
 	local createGroup = display.newGroup()
 	local popupBackground = display.newRect( createGroup, 0, 0, _W, _H )
 	popupBackground:setFillColor( 0 )
@@ -90,12 +99,36 @@ function editTask( task )
 	local popupCloseBtn = display.newRect( createGroup, 0, _H*0.3+100, 150, 80 )
 	popupCloseBtn.x = _W*0.5-100
 	colorScheme.Func( 'tsBlue', popupCloseBtn )
-	popupCloseBtn:addEventListener( "tap", function() display.remove( createGroup ); createGroup = nil; end )
+	popupCloseBtn:addEventListener( "tap", function() display.remove( createGroup ); createGroup = nil; native.setKeyboardFocus( nil ); end )
+
+	local taskDeletedBtn = display.newRect( createGroup, 0, _H*0.3+100, 150, 80 )
+	taskDeletedBtn.x = _W*0.5+200
+	colorScheme.Func( 'tsBlack', taskDeletedBtn )
+	taskDeletedBtn:addEventListener( "tap",
+		function() 
+			task.deleteTask( id )
+			display.remove( createGroup )
+			createGroup = nil
+			native.setKeyboardFocus( nil )
+			homeReplace()
+			tasklistReplace()
+		end 
+	)
 
 	local popupCompleteBtn = display.newRect( createGroup, 0, _H*0.3+100, 150, 80 )
 	popupCompleteBtn.x = _W*0.5+100
 	colorScheme.Func( 'tsRed', popupCompleteBtn )
-	popupCompleteBtn:addEventListener( "tap", function()  end )
+	popupCompleteBtn:addEventListener( "tap", 
+		function()
+			task.updateTask( id, taskContents )
+			local tasklistData = tasklist.getList()
+			display.remove( createGroup )
+			createGroup = nil
+			native.setKeyboardFocus( nil )
+			homeReplace()
+			tasklistReplace()
+		end 
+	)
 
 	local function popupTextFieldListener( event )
 	    if event.phase == "began" then

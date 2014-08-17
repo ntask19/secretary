@@ -12,6 +12,8 @@
 @
 ]]--
 local task_popup = require( viewDir .. 'task_popup' )
+local task_model = require('task_model')
+local task = task_model.new()
 
 module(..., package.seeall)
 
@@ -19,6 +21,19 @@ local custome = {
 	width = _W,
 	height = _H*0.5
 }
+
+-- チェックボックスを変化させる
+local function checkTasks( isChecked, obj1, obj2 )
+	if isChecked == 0 then
+		obj1.alpha = 1
+		obj2.alpha = 0
+		obj1:toFront()
+	else
+		obj1.alpha = 0
+		obj2.alpha = 1
+		obj2:toFront()
+	end
+end
 
 
 function show(data, option)
@@ -35,6 +50,7 @@ function show(data, option)
 
 	local function scrollViewListener( event )
 		local s = event.target    -- reference to scrollView object
+		print( event.type )
 		
 		if event.type == "movingToBottomLimit" then
 		end
@@ -76,7 +92,49 @@ function show(data, option)
 
 			for k = 1, #value['tasks'] do
 				local v = value['tasks'][k]
-				ssprint( k, v )
+				print( k, v )
+
+				local checkedBtn, unCheckedBtn
+
+				checkedBtn = btn.newRect( 
+					{
+						group = taskCellGroup, 
+						x = 40, 
+						y = taskCount*100+100, 
+						width = 60, 
+						height = 60, 
+						round = 10,
+						str = '',
+						action = function()
+							if v.is_checked == 0 then
+								v.is_checked = 1
+								task.completed( v.id )
+								checkTasks( 1, checkedBtn, unCheckedBtn )
+							end
+						end
+					}
+				)
+
+				unCheckedBtn = btn.newRect( 
+					{
+						group = taskCellGroup, 
+						x = 40, 
+						y = taskCount*100+100, 
+						width = 60, 
+						height = 60, 
+						round = 10,
+						str = '',
+						color = {255, 0, 0},
+						action = function()
+							if v.is_checked == 1 then
+								v.is_checked = 0
+								task.notYet( v.id )
+								checkTasks( 0, checkedBtn, unCheckedBtn )
+							end
+						end
+					}
+				)
+				checkTasks( v.is_checked, checkedBtn, unCheckedBtn )
 
 				local taskBackground = display.newRect( taskCellGroup, 100, taskCount*100+100, _W-200, 80 )
 				colorScheme.Func( 'tsGreen', taskBackground )
@@ -89,7 +147,7 @@ function show(data, option)
 				colorScheme.Func( 'tsBlack', date )
 				taskCount = taskCount + 1
 
-				taskBackground:addEventListener( "tap", function() task_popup.editTask( v.title ) end )
+				taskBackground:addEventListener( "tap", function() task_popup.editTask( v.id, v.title ); print( v.id, v.title ) end )
 			end
 
 		end
@@ -111,6 +169,8 @@ function showList(data, option)
 	local group = display.newGroup()
 
 	local background = display.newRect(group, 0, 0, _W, _H)
+	background:addEventListener( 'tap', returnTrue )
+	background:addEventListener( 'touch', returnTrue )
 
 	local background = display.newRect(group, 0, 0, _W, _H)
 	colorScheme.Func( 'tsYellow', background )
@@ -119,7 +179,18 @@ function showList(data, option)
 
 	local backBtn = display.newRect(group, _W-90, 60, 80, 80)
 	colorScheme.Func( 'tsRed', backBtn )
-	backBtn:addEventListener( "tap", function() display.remove(group); group = nil  end )
+	backBtn:addEventListener( "tap", 
+		function()
+			display.remove(group)
+			group = nil
+			local now = _nowPage
+			now = 'home'
+			print( _nowPage )
+			homeReplace( now )
+			print( _nowPage )
+			return true
+		end
+	)
 	local backBtnText = display.newText( group, "Exit", 0, 0, nil, 36 )
 	backBtnText.x, backBtnText.y = backBtn.x, backBtn.y
 
@@ -162,7 +233,7 @@ function showList(data, option)
 		
 		for key = 1, #data do
 			local value = data[key]
-			ssprint( key, value )
+			print( key, value )
 
 			local taskListBackground = display.newRect( taskCellGroup, 50, (taskCount-1)*100+40, _W-100, 80 )
 			colorScheme.Func( 'tsGreen', taskListBackground )
@@ -174,7 +245,49 @@ function showList(data, option)
 			if value ~= nil and value['tasks'] ~= nil then
 				for k = 1, #value['tasks'] do
 					local v = value['tasks'][k]
-					ssprint( k, v )
+					print( k, v )
+
+					local checkedBtn, unCheckedBtn
+
+					checkedBtn = btn.newRect( 
+						{
+							group = taskCellGroup, 
+							x = 40, 
+							y = (taskCount-1)*100+100+40, 
+							width = 60, 
+							height = 60, 
+							round = 10,
+							str = '',
+							action = function()
+								if v.is_checked == 0 then
+									v.is_checked = 1
+									task.completed( v.id )
+									checkTasks( 1, checkedBtn, unCheckedBtn )
+								end
+							end
+						}
+					)
+
+					unCheckedBtn = btn.newRect( 
+						{
+							group = taskCellGroup, 
+							x = 40, 
+							y = (taskCount-1)*100+100+40, 
+							width = 60, 
+							height = 60, 
+							round = 10,
+							str = '',
+							color = {255, 0, 0},
+							action = function()
+								if v.is_checked == 1 then
+									v.is_checked = 0
+									task.notYet( v.id )
+									checkTasks( 0, checkedBtn, unCheckedBtn )
+								end
+							end
+						}
+					)
+					checkTasks( v.is_checked, checkedBtn, unCheckedBtn )
 
 					local taskBackground = display.newRect( taskCellGroup, 100, (taskCount-1)*100+100+40, _W-200, 80 )
 					colorScheme.Func( 'tsGreen', taskBackground )
@@ -187,7 +300,7 @@ function showList(data, option)
 					colorScheme.Func( 'tsBlack', date )
 					taskCount = taskCount + 1
 
-					taskBackground:addEventListener( "tap", function() task_popup.editTask( v.title ) end )
+					taskBackground:addEventListener( "tap", function() task_popup.editTask( v.id, v.title ) end )
 				end
 				taskCount = taskCount + 1
 			else

@@ -82,7 +82,7 @@ function colorScheme.Func( colorType, obj )
 	else
 		colorTable = { 255/rgba, 255/rgba, 255/rgba }
 	end
-	-- ssprint("colorTable.r-------"..colorTable[1]..",colorTable.g-------"..colorTable[2]..",colorTable.b-------"..colorTable[3])
+	-- print("colorTable.r-------"..colorTable[1]..",colorTable.g-------"..colorTable[2]..",colorTable.b-------"..colorTable[3])
 	if obj then
 		obj:setFillColor( colorTable[1], colorTable[2], colorTable[3] )
 	else

@@ -1,4 +1,4 @@
--- ssprint関数
+-- tsprint関数
 _print = print
 
 function printTable(table, prefix)
@@ -21,7 +21,7 @@ function printTable(table, prefix)
 	end
 end
 
-function ssprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
+function tsprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
 	if _isDebug == true then
 		if type(str1) == "table" then
 			printTable(str1)
@@ -41,7 +41,7 @@ function ssprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
 end
 
 function print( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
-	ssprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
+	tsprint( str1, str2, str3, str4, str5, str6, str7, str8, str9, str10)
 end
 
 
